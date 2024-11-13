@@ -35,3 +35,5 @@ docs/
 
 # Dotenv file
 .env
+
+methods/guest/Cargo.lock
