@@ -1,0 +1,11 @@
+{
+    "rust-analyzer.linkedProjects": [
+        "./zkvm/Cargo.toml",
+        "./zkvm/guest/Cargo.toml",
+    ],
+    "workbench.editor.untitled.hint": "hidden",
+    "rust-analyzer.cargo.buildScripts.enable": true,
+    "rust-analyzer.check.extraEnv": {
+        "RISC0_SKIP_BUILD": "1",
+    },
+}

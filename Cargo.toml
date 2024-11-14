@@ -1,8 +1,10 @@
 [workspace]
 resolver = "2"
-members = ["host", "methods"]
+members = [
+    "zkvm", 
+    "zkvm-test"
+]
 
-# Always optimize; building and running the guest takes much longer without optimization.
 [profile.dev]
 opt-level = 3
 
