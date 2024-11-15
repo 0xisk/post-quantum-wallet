@@ -1,7 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
-    "zkvm", 
+    "zkvm", "zkvm-core", 
     "zkvm-test"
 ]
 
