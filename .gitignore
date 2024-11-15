@@ -37,3 +37,5 @@ docs/
 .env
 
 methods/guest/Cargo.lock
+
+.vscode

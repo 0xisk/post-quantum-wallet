@@ -1,8 +1,10 @@
 [workspace]
 resolver = "2"
 members = [
-    "zkvm", "zkvm-core", 
-    "zkvm-test"
+    "packages/zkvm", 
+    "packages/zkvm-host", 
+    "packages/zkvm-core", 
+    "packages/zkvm-test"
 ]
 
 [profile.dev]
