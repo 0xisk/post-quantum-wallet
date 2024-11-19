@@ -7,3 +7,9 @@
 [submodule "packages/contracts/lib/forge-std"]
 	path = packages/contracts/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "packages/bundler"]
+	path = packages/bundler
+	url = https://github.com/eth-infinitism/bundler
+[submodule "packages/trampoline"]
+	path = packages/trampoline
+	url = https://github.com/eth-infinitism/trampoline
