@@ -13,6 +13,12 @@
 [submodule "packages/trampoline"]
 	path = packages/trampoline
 	url = https://github.com/eth-infinitism/trampoline
-[submodule "packages/contracts/packages/contracts/lib"]
-	path = packages/contracts/packages/contracts/lib
+[submodule "packages/contracts/packages/contracts/lib/account-abstraction"]
+	path = packages/contracts/packages/contracts/lib/account-abstraction
+	url = https://github.com/eth-infinitism/account-abstraction.git
+[submodule "packages/contracts/lib/account-abstraction2"]
+	path = packages/contracts/lib/account-abstraction2
+	url = https://github.com/eth-infinitism/account-abstraction.git
+[submodule "packages/contracts/lib/account-abstraction"]
+	path = packages/contracts/lib/account-abstraction
 	url = https://github.com/eth-infinitism/account-abstraction.git
