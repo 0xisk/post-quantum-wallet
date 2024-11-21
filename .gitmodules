@@ -19,3 +19,6 @@
 [submodule "draft/trampoline"]
 	path = draft/trampoline
 	url = https://github.com/eth-infinitism/trampoline.git
+[submodule "draft/bundler"]
+	path = draft/bundler
+	url = https://github.com/eth-infinitism/bundler
