@@ -8,6 +8,23 @@ This project was designed to showcase an end-to-end post-quantum secure wallet u
 
 The solution leverages Zero-Knowledge Proofs (ZKPs) to protect users' public keys from exposure on-chain, ensuring Ethereum security in a post-quantum era.
 
+### TODOs
+
+- [X] Run `anvil` local Sepolia hardfork node.
+- [X] Implement ZKVM methods `zkvm-methods` that has the Risc0 constraints.  
+- [X] Implement ZKVM host `zkvm-host` that has the host program that passes the private inputs to the guests.
+- [X] Implement ZKVM test `zkvm-test` that has an integration tests for the zkvm methods.
+- [X] Implement a simple account contract for demo purposes `SimpleAccountDemo.sol`. 
+- [X] Create CLI app `zkvm-cli` commands for proof generation and submission.  
+- [X] Verify SNARK (Groth16) proofs on-chain in `zkvm-cli` app.
+- [ ] Verify STARK (Post-Quantum) proofs on-chain in `zkvm-cli` app.
+- [ ] Investigate recursive proof techniques for large proofs.  
+- [ ] Investigate `risc0-nova` for helping proving STARK proofs.  
+- [X] Deploy `EntryPoint` contract and ensure compatibility.  
+- [X] Deploy `SimpleAccountFactory` contract locally.
+- [X] Setup and run a local `bundler` node for full e2e app implementation with the `Trampoline`.   
+- [ ] (WIP) Set up browser extension `Trampoline` for `SimpleAccount` testing.    
+
 ## Concept
 ### Problem
 Current Ethereum security relies on ECDSA, where public keys are exposed on-chain. In a post-quantum world, quantum computers could use these public keys to derive private keys, posing a severe security risk.
@@ -26,6 +43,13 @@ Using RISC Zero STARK ZKPs:
 3. **Verify Proof**: The wallet verifies the proof. If valid, the transaction is executed; otherwise, it is reverted.
 
 This solution protects public keys on-chain, ensuring Ethereum remains secure even in a post-quantum computing world.
+
+## Challenges
+
+- **(WIP) Verifying STARK Proofs On-Chain**: STARK proofs are significantly large, requiring innovative approaches for efficient on-chain verification. Possible solutions include:
+  - **Splitting Proofs**: Dividing the proof into multiple transactions to fit within gas limits.
+  - **Recursive Compression**: Leveraging recursive techniques to compress the proofs into smaller, verifiable units. 
+  - Exploring solutions like **`risc0-nova`** for efficient recursive proof generation and verification.
 
 ## Getting Started
 ### Prerequisites
@@ -144,8 +168,6 @@ To run the project, ensure the following tools and environments are set up:
    git submodule update --init --recursive
    ```
 
----
-
 2. **Deploy `EntryPoint` Contract Locally**  
 
    - **Step 1:** Navigate to the bundler package directory and install dependencies.  
@@ -176,8 +198,6 @@ To run the project, ensure the following tools and environments are set up:
      Replace the `"entryPoint"` field with the new address:  
      `"entryPoint": "0x5ff137d4b0fdcd49dca30c7cf57e578a026d2789"`
 
----
-
 3. **Run Bundler Locally**  
 
    - **Step 1:** Preprocess and prepare the bundler.  
@@ -189,8 +209,6 @@ To run the project, ensure the following tools and environments are set up:
      ```shell
      yarn run bundler --network sepoliaFork --unsafe
      ```
-
----
 
 4. **Deploy `SimpleAccountFactory` Contract**  
 
@@ -211,8 +229,6 @@ To run the project, ensure the following tools and environments are set up:
      ```
      </details>
 
----
-
 5. **Run Browser Extension App Locally**  
 
    - **Step 1:** Update the browser extension configuration with the new `EntryPoint` and `SimpleAccountFactory` addresses.  
@@ -225,15 +241,3 @@ To run the project, ensure the following tools and environments are set up:
      yarn
      yarn start
      ```
-     
-## Challenges
-
-- **Verifying STARK Proofs On-Chain**: STARK proofs are significantly large, requiring innovative approaches for efficient on-chain verification. Possible solutions include:
-  - **Splitting Proofs**: Dividing the proof into multiple transactions to fit within gas limits.
-  - **Recursive Compression**: Leveraging recursive techniques to compress the proofs into smaller, verifiable units. 
-  - Exploring solutions like **`risc0-nova`** for efficient recursive proof generation and verification.
-
-## TODOs
-- [ ]  ssdfad
-
-### Running
