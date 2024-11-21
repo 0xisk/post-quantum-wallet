@@ -1,120 +1,239 @@
 # Post-Quantum Wallet
-Post-Quantum Wallet using Risc0 and Account-Abstraction
+
+A Proof-of-Concept for Post-Quantum Ethereum Security using RISC Zero and Account Abstraction. This concept was proposed by [Aayush Gupta](https://x.com/yush_g) in an [Ethereum Research post](https://ethresear.ch/t/quantum-proof-keypairs-with-ecdsa-zk/14901/2).
+
+## Overview
+
+This project was designed to showcase an end-to-end post-quantum secure wallet using the [Trampoline browser extension](https://github.com/eth-infinitism/trampoline) and the [Bundler](https://github.com/eth-infinitism/bundler). While some integration parts remain challenging and require more time to complete, we focused on providing a functional CLI application, `zkvm-cli`, for streamlined testing and experimentation.
+
+The solution leverages Zero-Knowledge Proofs (ZKPs) to protect users' public keys from exposure on-chain, ensuring Ethereum security in a post-quantum era.
+
+## Concept
+### Problem
+Current Ethereum security relies on ECDSA, where public keys are exposed on-chain. In a post-quantum world, quantum computers could use these public keys to derive private keys, posing a severe security risk.
+
+### Solution
+Using RISC Zero STARK ZKPs:
+1. Users prove ownership of a private key without revealing their public key.
+2. Proofs are verified on-chain by a smart contract wallet using Account Abstraction.
+3. This ensures quantum security while enabling transaction execution.
+
+## Implementation
+
+### Workflow
+1. **Generate Proof**: A ZKP is created using RISC Zero to prove ownership of a private key associated with an Ethereum address.
+2. **Submit Proof**: The proof is sent to a smart contract wallet.
+3. **Verify Proof**: The wallet verifies the proof. If valid, the transaction is executed; otherwise, it is reverted.
+
+This solution protects public keys on-chain, ensuring Ethereum remains secure even in a post-quantum computing world.
 
 ## Getting Started
+### Prerequisites
 
-### Prerequisite
-#### Install Submodules
+To run the project, ensure the following tools and environments are set up:
 
-#### Run local node
-1. To be able to run it locally you need to run a local node using `anvil`, I have been using Sepolia hard-fork network from Alchemy.
+- **Rust** (nightly version support)
+- **Node.js** (version 18.0.0 or later)
+- **Python** (version 3.9 or later)
+- **RISC Zero CLI**
+- **Foundry** (Ethereum development toolchain)
+- **Local Ethereum Node** (for testing or connect to a public testnet using `anvil` for example)
 
-```shell
-anvil --fork-url https://shape-sepolia.g.alchemy.com/v2/<ALCHEMY_KEY>
-```
+### Running
+1. **Run Local Node**  
+   To test locally, you need to run a local Ethereum node using `anvil`. For this project, we recommend forking the Sepolia testnet using Alchemy.  
+   ```shell
+   anvil --fork-url https://shape-sepolia.g.alchemy.com/v2/<ALCHEMY_KEY>
+   ```
 
-#### Deploy `EntryPoint` contract locally
-1. Run the following commands.
-```shell
-cd packages/bundler
-yarn
-# `sepoliaFork` is the Local Sepholia hardfork node  
-yarn hardhat-deploy --network sepoliaFork 
-```
-2. You should be able to see that expected output.
-```shell
-$ yarn hardhat-deploy --network sepoliaFork                                                       1 ✘  5s  
-yarn run v1.22.19
-$ lerna run hardhat-deploy --stream --no-prefix -- --network sepoliaFork
-lerna notice cli v5.6.2
-lerna info Executing command in 1 package: "yarn run hardhat-deploy --network sepoliaFork"
-$ hardhat deploy --network sepoliaFork
-Nothing to compile
-No need to generate any newer typings.
-EntryPoint already deployed at 0x5ff137d4b0fdcd49dca30c7cf57e578a026d2789
-lerna success run Ran npm script 'hardhat-deploy' in 1 package in 1.4s:
-lerna success - @account-abstraction/bundler
-Done in 1.62s.
-```
-3. Copy the `entrypoint` contract address and assign it to the bundler localconfig:
-```shell
-cd packages/bundler/packages/bundler/localconfig
-vim bundler.config.json # Or with using any editor
-```
-4. Change `"entryPoint": "0x5ff137d4b0fdcd49dca30c7cf57e578a026d2789"` with your new address. 
+2. **Install Submodules**  
+   The contracts require some submodules to be initialized and updated.  
+   ```shell
+   cd contracts
+   git submodule update --init --recursive
+   ```
 
-#### Run bundler locally
-1. Run the following commands:
-```shell
-cd packages/bundler
+3. **Deploy `SimpleAccountDemo` Contract**  
+   This demo contract simplifies the `SimpleAccount` architecture from Account Abstraction for testing purposes.  
+   ```shell
+   cd contracts
+   forge script script/DeploySimpleAccountDemo.sol:SimpleAccountDemoDeploy --broadcast --private-key <PRIVATE_KEY>
+   ```
 
-yarn && yarn preprocess
+4. **Expected Output**
+   <details>
+   <summary>Click to expand</summary>
 
-yarn run bundler --network sepoliafork --unsafe  
-```
+   ```plaintext
+   [⠊] Compiling...
+   No files changed, compilation skipped
+   Script ran successfully.
 
-### Deploy `SimpleAccountFactory` contract
-1. Run the following commands:
-```shell
-cd packages/contracts
-forge script script/DeployFactory.sol:DeployFactory --broadcast --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 # That is a private key for the first provided address in the local node -for testing purposes-
-```
+   == Logs ==
+   You are deploying on ChainID 11011
+   Local deployment condition: false
+   Deployed RiscZeroGroth16Verifier to 0xE6E340D132b5f46d1e472DebcD681B2aBc16e57E
+   Deployed local RiscZeroGroth16Verifier to: 0xE6E340D132b5f46d1e472DebcD681B2aBc16e57E
+   ==> SimpleAccount initialized with owner: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+   Deployed SimpleAccountDemo to: 0xc3e53F4d16Ae77Db1c982e75a937B9f60FE63690
 
-2. You should be able to get an output similar to this.
-```shell
-$ forge script script/DeployFactory.sol:DeployFactory --broadcast --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+   ## Setting up 1 EVM.
 
-[⠊] Compiling...
-No files changed, compilation skipped
-Script ran successfully.
+   ==========================
 
-== Logs ==
-  ==> Factory created!
-  SimpleAccountFactory deployed at: 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9
+   Chain 11011
 
-## Setting up 1 EVM.
+   Estimated gas price: 1.00000002 gwei
 
-==========================
+   Estimated total gas used for script: 2240727
 
-Chain 11011
+   Estimated amount required: 0.00224072704481454 ETH
 
-Estimated gas price: 0.000000359 gwei
+   ==========================
 
-Estimated total gas used for script: 2382032
+   ##### 11011
+   ✅  [Success]Hash: 0x38e657f097bf5c0f06db91531026fa85721ea20644e71d9807762ad2b3f7106e
+   Contract Address: 0xc3e53F4d16Ae77Db1c982e75a937B9f60FE63690
+   Block: 6625031
+   Paid: 0.000523628004712652 ETH (523628 gas * 1.000000009 gwei)
 
-Estimated amount required: 0.000000000855149488 ETH
+   ##### 11011
+   ✅  [Success]Hash: 0x687fb751abd2b01537506d136155a363ad4071b3e6e40248f80aa361e633ed51
+   Contract Address: 0xE6E340D132b5f46d1e472DebcD681B2aBc16e57E
+   Block: 6625031
+   Paid: 0.001200785010807065 ETH (1200785 gas * 1.000000009 gwei)
 
-==========================
+   ✅ Sequence #1 on 11011 | Total Paid: 0.001724413015519717 ETH (1724413 gas * avg 1.000000009 gwei)
+                                                                     
 
-##### 11011
-✅  [Success]Hash: 0x34620212732576258e2ee77e30beb26e299d60da9eb4aaf1303b8ff8439f215c
-Contract Address: 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9
-Block: 6617784
-Paid: 0.000000000295158563 ETH (1833283 gas * 0.000000161 gwei)
+   ==========================
 
-✅ Sequence #1 on 11011 | Total Paid: 0.000000000295158563 ETH (1833283 gas * avg 0.000000161 gwei)
-                                                                                                                                                                    
-==========================
+   ONCHAIN EXECUTION COMPLETE & SUCCESSFUL.
 
-ONCHAIN EXECUTION COMPLETE & SUCCESSFUL.
+   Transactions saved to: /home/isk/Projects/risc0/post-quantum-wallet/contracts/broadcast/DeploySimpleAccountDemo.sol/11011/run-latest.json
 
-Transactions saved to: /home/isk/Projects/risc0/post-quantum-wallet/packages/contracts/broadcast/DeployFactory.sol/11011/run-latest.json
+   Sensitive values saved to: /home/isk/Projects/risc0/post-quantum-wallet/contracts/cache/DeploySimpleAccountDemo.sol/11011/run-latest.json
+   ```
+   </details>
 
-Sensitive values saved to: /home/isk/Projects/risc0/post-quantum-wallet/packages/contracts/cache/DeployFactory.sol/11011/run-latest.json
-```
+5. **Run Publisher App**  
+   The `publisher` app generates a ZK proof (currently SNARK) and verifies it on-chain.  
+   ```shell
+   RUST_LOG=info cargo run --bin publisher --release -- \
+     --chain-id 11011 \
+     --eth-wallet-private-key <PRIVATE_KEY> \
+     --rpc-url http://127.0.0.1:8545 \
+     --simple-account <SIMPLE_ACCOUNT_DEMO_CONTRACT_ADDRESS> \
+     --recipient <RECIPIENT_ADDRESS> \
+     --amount 1000000000000000000
+   ```
 
-### Run browser extension app locally
-1. Change the configs of the browser extension to be using the new addresses of `EntryPoint` and `SimpleAccountFactory` contracts.
-```shell
-cd packages/app
-vim src/excofig.ts
-``` 
-2. Run the following commands:
-```shell
-yarn 
+6. **Configure Publisher App**  
+   By default, the app uses hardcoded values for testing (e.g., the first address from the `anvil` node). Update these values as needed.  
+   ```rust
+   // Generate Proof
+   let public_key = "8318535b54105d4a7aae60c08fc45f9687181b4fdfc625bd1a753fa7397fed753547f11ca8696646f2f3acb08e31016afac23e630c5d11f59f61fef57b0d2aa5".to_string();
+   let expected_address = "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266".to_string();
+   ```
 
-yarn start
-```
+### Development
 
+1. **Install Submodules**  
+   The project requires initializing and updating submodules before proceeding.  
+   ```shell
+   git submodule update --init --recursive
+   ```
+
+---
+
+2. **Deploy `EntryPoint` Contract Locally**  
+
+   - **Step 1:** Navigate to the bundler package directory and install dependencies.  
+     ```shell
+     cd packages/bundler
+     yarn
+     ```
+   - **Step 2:** Deploy the `EntryPoint` contract to the local Sepolia hard-fork network using `anvil`.  
+     ```shell
+     yarn hardhat-deploy --network sepoliaFork
+     ```
+   - **Expected Output:**  
+     <details>
+     <summary>Click to expand</summary>
+
+     ```plaintext
+     Nothing to compile
+     No need to generate any newer typings.
+     EntryPoint already deployed at 0x5ff137d4b0fdcd49dca30c7cf57e578a026d2789
+     ```
+     </details>
+
+   - **Step 3:** Copy the deployed `EntryPoint` contract address from the output.  
+   - **Step 4:** Update the bundler configuration file with the new `EntryPoint` address.  
+     ```shell
+     vim packages/bundler/localconfig/bundler.config.json
+     ```
+     Replace the `"entryPoint"` field with the new address:  
+     `"entryPoint": "0x5ff137d4b0fdcd49dca30c7cf57e578a026d2789"`
+
+---
+
+3. **Run Bundler Locally**  
+
+   - **Step 1:** Preprocess and prepare the bundler.  
+     ```shell
+     cd packages/bundler
+     yarn && yarn preprocess
+     ```
+   - **Step 2:** Start the bundler on the local Sepolia hard-fork node.  
+     ```shell
+     yarn run bundler --network sepoliaFork --unsafe
+     ```
+
+---
+
+4. **Deploy `SimpleAccountFactory` Contract**  
+
+   - **Step 1:** Navigate to the contracts package and deploy the contract.  
+     ```shell
+     cd packages/contracts
+     forge script script/DeployFactory.sol:DeployFactory --broadcast --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+     ```
+     *(The private key provided is for the first address in the local node and is used for testing purposes.)*
+
+   - **Expected Output:**  
+     <details>
+     <summary>Click to expand</summary>
+
+     ```plaintext
+     ==> Factory created!
+     SimpleAccountFactory deployed at: 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9
+     ```
+     </details>
+
+---
+
+5. **Run Browser Extension App Locally**  
+
+   - **Step 1:** Update the browser extension configuration with the new `EntryPoint` and `SimpleAccountFactory` addresses.  
+     ```shell
+     vim packages/app/src/exconfig.ts
+     ```  
+   - **Step 2:** Install dependencies and start the browser extension.  
+     ```shell
+     cd packages/app
+     yarn
+     yarn start
+     ```
+     
+## Challenges
+
+- **Verifying STARK Proofs On-Chain**: STARK proofs are significantly large, requiring innovative approaches for efficient on-chain verification. Possible solutions include:
+  - **Splitting Proofs**: Dividing the proof into multiple transactions to fit within gas limits.
+  - **Recursive Compression**: Leveraging recursive techniques to compress the proofs into smaller, verifiable units. 
+  - Exploring solutions like **`risc0-nova`** for efficient recursive proof generation and verification.
+
+## TODOs
+- [ ]  ssdfad
 
 ### Running
