@@ -1,11 +1,11 @@
 [workspace]
 resolver = "2"
 members = [
-    "packages/zkvm", 
-    "packages/zkvm-host", 
-    "packages/zkvm-core", 
-    "packages/zkvm-test"
-]
+    "zkvm-methods", 
+    "zkvm-host", 
+    "zkvm-core", 
+    "zkvm-test", 
+    "zkvm-cli"]
 
 [profile.dev]
 opt-level = 3
