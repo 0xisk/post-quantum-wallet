@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.23;
 
+import "forge-std/console.sol";
 import "../lib/openzeppelin-contracts/contracts/utils/Create2.sol";
 import "../lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 
@@ -16,6 +17,7 @@ contract SimpleAccountFactory {
     SimpleAccount public immutable accountImplementation;
 
     constructor(IEntryPoint _entryPoint) {
+        console.log("==> Factory created!");
         accountImplementation = new SimpleAccount(_entryPoint);
     }
 

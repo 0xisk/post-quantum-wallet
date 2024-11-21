@@ -2,7 +2,6 @@ use ethers::utils::hex;
 use k256::ecdsa::{RecoveryId, Signature, VerifyingKey};
 use risc0_zkvm::{default_prover, ExecutorEnv, Receipt};
 use zkvm::ECDSA_VERIFY_ELF;
-use zkvm_core::ECDSAInputs;
 
 /// Given an sec
 ///

@@ -1,5 +1,5 @@
 [package]
-name = "ecdsa-verify"
+name = "owner-verify"
 version = "0.1.0"
 edition = "2021"
 
@@ -11,6 +11,7 @@ hex-literal = "0.4"
 k256 = { version = "=0.13.1", features = ["arithmetic", "serde", "expose-field", "std", "ecdsa"], default_features = false }
 sha3 = { version = "0.10.8" }
 hex = "0.4.3"
+tiny-keccak = { version = "2.0.2", features = ["keccak"] }
 
 [patch.crates-io]
 # Placing these patch statement in the workspace Cargo.toml will add RISC Zero SHA-256 and bigint
