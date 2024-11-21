@@ -2,6 +2,22 @@
 
 A Proof-of-Concept for Post-Quantum Ethereum Security using RISC Zero and Account Abstraction. This concept was proposed by [Aayush Gupta](https://x.com/yush_g) in an [Ethereum Research post](https://ethresear.ch/t/quantum-proof-keypairs-with-ecdsa-zk/14901/2).
 
+## Table of Contents
+
+1. [Post-Quantum Wallet](#post-quantum-wallet)
+2. [Overview](#overview)
+3. [TODOs](#todos)
+4. [Concept](#concept)
+    - [Problem](#problem)
+    - [Solution](#solution)
+5. [Implementation](#implementation)
+    - [Workflow](#workflow)
+6. [Challenges](#challenges)
+7. [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Running](#running)
+8. [Development](#development)
+
 ## Overview
 
 This project was designed to showcase an end-to-end post-quantum secure wallet using the [Trampoline browser extension](https://github.com/eth-infinitism/trampoline) and the [Bundler](https://github.com/eth-infinitism/bundler). While some integration parts remain challenging and require more time to complete, we focused on providing a functional CLI application, `zkvm-cli`, for streamlined testing and experimentation.
