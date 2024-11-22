@@ -1,10 +1,10 @@
 [package]
-name = "zkvm-host"
+name = "host"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-zkvm-methods = { path = "../zkvm-methods" }
+methods = { path = "../methods" }
 risc0-zkvm = { version = "1.1.2" }
 risc0-ethereum-contracts = "1.1.4"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }

@@ -14,7 +14,7 @@ use ethers::abi::{ethabi, Token};
 use risc0_ethereum_contracts::{encode_seal, groth16::abi_encode};
 use risc0_zkvm::{default_prover, ExecutorEnv, ProverOpts, VerifierContext};
 use url::Url;
-use zkvm_methods::OWNER_VERIFY_ELF;
+use methods::OWNER_VERIFY_ELF;
 
 alloy::sol!(
     #[sol(rpc, all_derives)]

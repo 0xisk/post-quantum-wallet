@@ -5,7 +5,7 @@ use risc0_zkvm::serde::{from_slice, to_vec};
 use risc0_zkvm::{default_prover, ExecutorEnv, ProverOpts, VerifierContext};
 use std::fs::File;
 use std::io::Write;
-use zkvm_methods::OWNER_VERIFY_ELF;
+use methods::OWNER_VERIFY_ELF;
 
 fn main() {
     let public_key = "04bfcab52a7c7ab70c6c93f830c0c24f5c8e7e6b5c2d76bb16b8c3ecf1cbd554fa15964cbb203ddeee2a47191d51f3a6b8078ec6c2383b0c0738392a88a5b07092".to_string();

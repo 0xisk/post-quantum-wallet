@@ -20,7 +20,7 @@ pragma solidity ^0.8.20;
 
 library Elf {
     string public constant ECDSA_VERIFY_PATH =
-        "/tmp/cargo-installEKubge/riscv-guest/riscv32im-risc0-zkvm-elf/release/ecdsa_verify";
+        "/home/isk/Projects/risc0/post-quantum-wallet/target/riscv-guest/riscv32im-risc0-zkvm-elf/release/ecdsa_verify";
     string public constant OWNER_VERIFY_PATH =
-        "/tmp/cargo-installEKubge/riscv-guest/riscv32im-risc0-zkvm-elf/release/owner_verify";
+        "/home/isk/Projects/risc0/post-quantum-wallet/target/riscv-guest/riscv32im-risc0-zkvm-elf/release/owner_verify";
 }

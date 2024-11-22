@@ -1,11 +1,11 @@
 [package]
-name = "zkvm-test"
+name = "test"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-zkvm-methods = { path = "../zkvm-methods" }
-zkvm-core = { path = "../zkvm-core" }
+methods = { path = "../methods" }
+core = { path = "../core" }
 k256 = { version = "=0.13.1", features = ["arithmetic", "serde", "expose-field", "std", "ecdsa"], default_features = false }
 risc0-zkvm = { version = "1.1.2", default-features = false, features = ['std', 'client'] }
 ethers = "2.0.11"

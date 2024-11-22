@@ -1,5 +1,5 @@
 [package]
-name = "zkvm-cli"
+name = "cli"
 version = "0.1.0"
 edition = "2021"
 
@@ -8,7 +8,7 @@ name = "publisher"
 path = "src/bin/publisher_demo.rs"
 
 [dependencies]
-zkvm-methods = { path = "../zkvm-methods" }
+methods = { path = "../methods" }
 alloy = { version = "0.4", features = ["full"] }
 alloy-primitives = { version = "0.8.12", default-features = false, features = ["rlp", "serde", "std"] }
 alloy-sol-types = "0.8.12"

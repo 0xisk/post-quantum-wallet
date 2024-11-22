@@ -10,7 +10,7 @@ use clap::Parser;
 use risc0_ethereum_contracts::encode_seal;
 use risc0_zkvm::{default_prover, ExecutorEnv, ProverOpts, VerifierContext};
 use url::Url;
-use zkvm_methods::OWNER_VERIFY_ELF;
+use methods::OWNER_VERIFY_ELF;
 
 alloy::sol!(
     #[sol(rpc, all_derives)]

@@ -1,7 +1,7 @@
 use ethers::utils::hex;
 use k256::ecdsa::{RecoveryId, Signature, VerifyingKey};
 use risc0_zkvm::{default_prover, ExecutorEnv, Receipt};
-use zkvm_methods::ECDSA_VERIFY_ELF;
+use methods::ECDSA_VERIFY_ELF;
 
 /// Given an sec
 ///
@@ -57,7 +57,7 @@ mod tests {
         EncodedPoint,
     };
     use sha3::{Digest, Keccak256};
-    use zkvm_methods::ECDSA_VERIFY_ID;
+    use methods::ECDSA_VERIFY_ID;
 
     #[test]
     fn test_verify_ecdsa() {
