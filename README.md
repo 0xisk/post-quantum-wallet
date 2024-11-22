@@ -21,21 +21,21 @@ A Proof-of-Concept for Post-Quantum Ethereum Security using RISC Zero and Accoun
 
 ## Overview
 
-This project was designed to showcase an end-to-end post-quantum secure wallet using the [Trampoline browser extension](https://github.com/eth-infinitism/trampoline) and the [Bundler](https://github.com/eth-infinitism/bundler). While some integration parts remain challenging and require more time to complete, we focused on providing a functional CLI application, `zkvm-cli`, for streamlined testing and experimentation.
+This project was designed to showcase an end-to-end post-quantum secure wallet using the [Trampoline browser extension](https://github.com/eth-infinitism/trampoline) and the [Bundler](https://github.com/eth-infinitism/bundler). While some integration parts remain challenging and require more time to complete, we focused on providing a functional CLI application, `cli`, for streamlined testing and experimentation.
 
 The solution leverages Zero-Knowledge Proofs (ZKPs) to protect users' public keys from exposure on-chain, ensuring Ethereum security in a post-quantum era.
 
 ### TODOs
 
 - [X] Run `anvil` local Sepolia hardfork node.
-- [X] Implement ZKVM methods `zkvm-methods` that has the Risc0 constraints.  
-- [ ] Benchmarking (time-analysis) for the `zkvm-methods` guests.
-- [X] Implement ZKVM host `zkvm-host` that has the host program that passes the private inputs to the guests.
-- [X] Implement ZKVM test `zkvm-test` that has an integration tests for the zkvm methods.
+- [X] Implement ZKVM methods `methods` that has the Risc0 constraints.  
+- [ ] Benchmarking (time-analysis) for the `methods` guests.
+- [X] Implement ZKVM host `host` that has the host program that passes the private inputs to the guests.
+- [X] Implement ZKVM test `test` that has an integration tests for the zkvm methods.
 - [X] Implement a simple account contract for demo purposes `SimpleAccountDemo.sol`. 
-- [X] Create CLI app `zkvm-cli` commands for proof generation and submission.  
-- [X] Verify SNARK (Groth16) proofs on-chain in `zkvm-cli` app.
-- [ ] Verify STARK (Post-Quantum) proofs on-chain in `zkvm-cli` app.
+- [X] Create CLI app `cli` commands for proof generation and submission.  
+- [X] Verify SNARK (Groth16) proofs on-chain in `cli` app.
+- [ ] Verify STARK (Post-Quantum) proofs on-chain in `cli` app.
 - [ ] Investigate recursive proof techniques for large proofs.  
 - [ ] Investigate `risc0-nova` for helping proving STARK proofs.  
 - [X] Deploy `EntryPoint` contract and ensure compatibility.  
@@ -300,24 +300,24 @@ Below are the primary files in the project directory
 ├── LICENSE                    
 ├── README.md                  
 ├── rust-toolchain.toml        # Rust toolchain configuration for project consistency.
-├── zkvm-cli                   # CLI application for generating and submitting proofs.
+├── cli                   # CLI application for generating and submitting proofs.
 │   ├── Cargo.toml             
 │   └── src                    
-├── zkvm-core                  # Core library for zkVM-based operations.
+├── core                  # Core library for zkVM-based operations.
 │   ├── Cargo.toml             
 │   └── src                    
-├── zkvm-host                  # Host-side logic for interacting with zkVM.
+├── host                  # Host-side logic for interacting with zkVM.
 │   ├── Cargo.toml             
 │   ├── proof-groth16.txt      
 │   ├── proof-succinct.txt     
 │   └── src                   
-├── zkvm-methods               # Methods for zkVM computation and proof generation.
+├── methods               # Methods for zkVM computation and proof generation.
 │   ├── build.rs               
 │   ├── Cargo.toml             
 │   ├── guest                  
 │   ├── README.md              
 │   └── src                   
-└── zkvm-test                  # Integration tests for zkVM functionality.
+└── test                  # Integration tests for zkVM functionality.
     ├── Cargo.toml             
     └── src                    
 
