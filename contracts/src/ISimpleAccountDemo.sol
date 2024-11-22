@@ -18,29 +18,29 @@ interface ISimpleAccountDemo {
 
     /**
      * @notice Execute a transaction if the proof is valid.
-     * @param journal The committed journal (encoded data, e.g., owner address).
      * @param target The target address for the call.
      * @param value The value to transfer in the call.
      * @param data The calldata to send in the call.
      * @param seal The proof to validate the transaction.
+     * @param checked The owner checked address.
      */
     function execute(
-        bytes calldata journal,
         address target,
         uint256 value,
         bytes calldata data,
-        bytes calldata seal
+        bytes calldata seal,
+        address checked
     ) external;
 
     /**
      * @notice Internal function to validate the proof and the journal.
      * Exposed for testing or external validation purposes.
-     * @param journal The committed journal.
      * @param seal The proof data.
+     * @param checked The owner checked address.
      * @return Whether the proof is valid or not.
      */
     function _validateProof(
-        bytes calldata journal,
-        bytes calldata seal
+        bytes calldata seal,
+        address checked
     ) external view returns (bool);
 }

@@ -10,6 +10,7 @@ use alloy::{
 use alloy_primitives::{Address, U256};
 use anyhow::{Context, Result};
 use clap::Parser;
+use ethers::abi::{ethabi, Token};
 use risc0_ethereum_contracts::{encode_seal, groth16::abi_encode};
 use risc0_zkvm::{default_prover, ExecutorEnv, ProverOpts, VerifierContext};
 use url::Url;
@@ -33,7 +34,13 @@ struct Args {
     rpc_url: Url,
 
     #[clap(long)]
-    simple_account: Address,
+    contract: Address,
+
+    #[clap(long)]
+    public_key: String,
+
+    #[clap(long)]
+    expected_address: String,
 
     #[clap(long)]
     recipient: Address,
@@ -61,17 +68,21 @@ fn main() -> Result<()> {
     println!("Initialized provider with wallet.");
 
     // Generate Proof
-    let public_key = "8318535b54105d4a7aae60c08fc45f9687181b4fdfc625bd1a753fa7397fed753547f11ca8696646f2f3acb08e31016afac23e630c5d11f59f61fef57b0d2aa5".to_string();
-    let expected_address = "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266".to_string();
+    let public_key = args.public_key;
+    let expected_address = args.expected_address;
 
-    let inputs = (&public_key, &expected_address);
+    let encoded_inputs = ethabi::encode(&[
+        Token::Bytes(hex::decode(public_key).expect("Failed to decode public key")),
+        Token::Address(expected_address.parse().expect("Failed to decode address")),
+    ]);
+
     let env = ExecutorEnv::builder()
-        .write(&inputs)
+        .write(&encoded_inputs)
         .expect("Writing failed")
         .build()
         .expect("Failed to create ExecutorEnv");
 
-        // TODO: replace with STARK 
+    // TODO: replace with STARK
     let groth16_proof_receipt = default_prover()
         .prove_with_ctx(
             env,
@@ -86,37 +97,30 @@ fn main() -> Result<()> {
     println!("Encoded seal: {:?}", seal);
 
     // Extract the journal from the receipt.
-    let journal = groth16_proof_receipt.journal;
-    let journal_bytes = journal.bytes.clone();
-    println!("journal: {:?}", journal);
+    let journal = groth16_proof_receipt.journal.bytes.clone();
 
-    // Encode the journal as an ABI-compatible byte array.
-    // let encoded_journal = ethabi::encode(&[ethabi::Token::Bytes(journal.clone())]);
-    // println!("Encoded journal: {:?}", encoded_journal);
-
-    let address = abi_encode(&journal_bytes).context("decoding journal data")?;
-    println!("journal: {:?}", address);
+    let owner_address = Address::abi_decode(&journal, true).expect("Failed to decode");
+    println!("owner_address: {:?}", owner_address);
 
     // Prepare calldata (data) for the execute function
     let calldata = args
         .data
         .map(|data| hex::decode(data.strip_prefix("0x").unwrap_or(&data)).unwrap_or_default())
         .unwrap_or_default();
-    println!("Prepared calldata: {:?}", calldata);
 
     // Execute Transaction
-    let simple_account_contract = ISimpleAccountDemo::new(args.simple_account, provider);
+    let simple_account_contract = ISimpleAccountDemo::new(args.contract, provider);
     println!(
         "Initialized contract instance for address: {:?}",
-        args.simple_account
+        args.contract
     );
 
     let tx_data = simple_account_contract.execute(
-        journal_bytes.into(),
         args.recipient,
         args.amount,
         calldata.into(),
         seal.into(),
+        owner_address,
     );
 
     let runtime = tokio::runtime::Runtime::new()?;

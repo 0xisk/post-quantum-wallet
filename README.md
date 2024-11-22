@@ -17,6 +17,7 @@ A Proof-of-Concept for Post-Quantum Ethereum Security using RISC Zero and Accoun
     - [Prerequisites](#prerequisites)
     - [Running](#running)
 8. [Development](#development)
+9. [Project Structure](#project-structure)
 
 ## Overview
 
@@ -28,6 +29,7 @@ The solution leverages Zero-Knowledge Proofs (ZKPs) to protect users' public key
 
 - [X] Run `anvil` local Sepolia hardfork node.
 - [X] Implement ZKVM methods `zkvm-methods` that has the Risc0 constraints.  
+- [ ] Benchmarking (time-analysis) for the `zkvm-methods` guests.
 - [X] Implement ZKVM host `zkvm-host` that has the host program that passes the private inputs to the guests.
 - [X] Implement ZKVM test `zkvm-test` that has an integration tests for the zkvm methods.
 - [X] Implement a simple account contract for demo purposes `SimpleAccountDemo.sol`. 
@@ -163,9 +165,25 @@ To run the project, ensure the following tools and environments are set up:
      --chain-id 11011 \
      --eth-wallet-private-key <PRIVATE_KEY> \
      --rpc-url http://127.0.0.1:8545 \
-     --simple-account <SIMPLE_ACCOUNT_DEMO_CONTRACT_ADDRESS> \
+     --contract <SIMPLE_ACCOUNT_DEMO_CONTRACT_ADDRESS> \
+     --public-key <PUBLIC_KEY> \
+     --expected-address <EXPECTED_OWNER_ADDRESS> \
      --recipient <RECIPIENT_ADDRESS> \
      --amount 1000000000000000000
+   ```
+
+   ```shell
+      # example
+
+      RUST_LOG=info cargo run --bin publisher --release -- \
+        --chain-id 11011 \
+        --eth-wallet-private-key "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80" \
+        --rpc-url http://127.0.0.1:8545 \
+        --contract 0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6 \
+        --public-key "8318535b54105d4a7aae60c08fc45f9687181b4fdfc625bd1a753fa7397fed753547f11ca8696646f2f3acb08e31016afac23e630c5d11f59f61fef57b0d2aa5" \
+        --expected-address 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266 \
+        --recipient 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC \
+        --amount 1000000000000000000
    ```
 
 6. **Configure Publisher App**  
@@ -257,3 +275,51 @@ To run the project, ensure the following tools and environments are set up:
      yarn
      yarn start
      ```
+
+## Project structure
+Below are the primary files in the project directory
+
+```shell
+├── Cargo.lock                 
+├── Cargo.toml                 
+├── contracts                  # Solidity smart contracts and related tools.
+│   ├── broadcast              
+│   ├── cache                  
+│   ├── foundry.toml           
+│   ├── lib                    
+│   ├── out                    
+│   ├── README.md              
+│   ├── remappings.txt         
+│   ├── script                 
+│   ├── src                    
+│   └── test                   
+├── draft                      # Experimental and unfinished subprojects or components.
+│   ├── aa-contracts           # Draft Account Abstraction contracts.
+│   ├── bundler                # Draft bundler service for AA transactions.
+│   └── trampoline             # Draft browser extension integration for AA wallets.
+├── LICENSE                    
+├── README.md                  
+├── rust-toolchain.toml        # Rust toolchain configuration for project consistency.
+├── zkvm-cli                   # CLI application for generating and submitting proofs.
+│   ├── Cargo.toml             
+│   └── src                    
+├── zkvm-core                  # Core library for zkVM-based operations.
+│   ├── Cargo.toml             
+│   └── src                    
+├── zkvm-host                  # Host-side logic for interacting with zkVM.
+│   ├── Cargo.toml             
+│   ├── proof-groth16.txt      
+│   ├── proof-succinct.txt     
+│   └── src                   
+├── zkvm-methods               # Methods for zkVM computation and proof generation.
+│   ├── build.rs               
+│   ├── Cargo.toml             
+│   ├── guest                  
+│   ├── README.md              
+│   └── src                   
+└── zkvm-test                  # Integration tests for zkVM functionality.
+    ├── Cargo.toml             
+    └── src                    
+
+28 directories, 18 files
+```

@@ -20,7 +20,7 @@ pragma solidity ^0.8.20;
 
 library ImageID {
     bytes32 public constant ECDSA_VERIFY_ID =
-        bytes32(0x1a0f9afa8cc9df1e4f2a08f58a574e1dc355da3d293dbac707262b256a1d0958);
+        bytes32(0xafa6b93894655a7f2c7f231618c290229920a4d2ede8e9f2a73531720099cb41);
     bytes32 public constant OWNER_VERIFY_ID =
-        bytes32(0x58bff4de70f26531abd8e39d334099b0205df8576333defe627bd2cdb8741b23);
+        bytes32(0xbb5d19b52df01f0b754e6009c83b7775a6121a9862700f4a0d5724b9443fe0f7);
 }

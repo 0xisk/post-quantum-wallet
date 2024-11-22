@@ -39,37 +39,36 @@ contract SimpleAccountDemo {
 
     /**
      * Executed a transaction if the proof is valid.
-     * @param journal The committed journal (encoded data, e.g., owner address).
      * @param target The target address for the call.
      * @param value The value to transfer in the call.
      * @param data The calldata to send in the call.
      * @param seal The proof to validate the transaction.
+     * @param checked The owner checked address.
      */
     function execute(
-        bytes calldata journal,
         address target,
         uint256 value,
         bytes calldata data,
-        bytes calldata seal
+        bytes calldata seal,
+        address checked
     ) external onlyOwner {
-        require(_validateProof(journal, seal), "Invalid proof");
+        require(_validateProof(seal, checked), "Invalid proof");
         console.log("==> SimpleAccount execute called with target:", target);
         emit Executed(target, value, data);
     }
 
     /**
      * Internal function to validate the proof and the journal.
-     * @param journal The committed journal.
      * @param seal The proof data.
+     * @param checked The owner checked address.
      * @return Whether the proof is valid or not.
      */
     function _validateProof(
-        bytes memory journal,
-        bytes memory seal
+        bytes memory seal,
+        address checked
     ) internal view returns (bool) {
-        console.log("==> SimpleAccount _validateProof called");
-        console.log("==> SimpleAccount Journal");
-        console.logBytes(journal);
+        require(checked == owner, "NOT RIGHT OWNER!");
+        bytes memory journal = abi.encode(checked);
 
         // Verify the proof using the verifier contract
         verifier.verify(seal, imageId, sha256(journal));
